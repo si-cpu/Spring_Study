@@ -1,14 +1,15 @@
 package com.study.springstudy.core.chap04;
 
-import com.study.core.springstudy.chap04.Hotel;
-import com.study.core.springstudy.chap04.config.AppConfig;
+import com.study.springstudy.core.chap04.config.AppConfig;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 class HotelAutoDiTest {
 
     @Test
-    void autoDiTest(){
+    void autoDiTest() {
         AnnotationConfigApplicationContext ctx
                 = new AnnotationConfigApplicationContext(AppConfig.class);
 
