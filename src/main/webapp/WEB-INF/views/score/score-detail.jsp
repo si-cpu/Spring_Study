@@ -81,7 +81,8 @@ prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
         </ul>
         <div class="btn-group">
           <a class="list-btn" href="/score/list">목록</a>
-          <!-- 수정 페이지 이동 링크. -> 서버에게 몇 번 학생이 수정되려는지를 알려줘야 하기 때문에
+          <!-- 수정 페이지 이동 링크. 
+           서버에게 몇 번 학생이 수정되려는지를 알려줘야 하기 때문에
                     파라미터를 추가해서 요청 전달. -->
           <a class="mod-btn" href="/score/modify?stuNum=${stu.stuNum}">수정</a>
         </div>
