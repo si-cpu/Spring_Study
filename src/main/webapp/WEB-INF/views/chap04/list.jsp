@@ -80,28 +80,38 @@
             <!-- 페이지 버튼 영역 -->
             <nav aria-label="Page navigation example">
                 <ul class="pagination pagination-lg pagination-custom">
+                    <c:if test="${maker.prev}">
                         <li class="page-item"><a class="page-link"
-                                                 href="#">&lt;&lt;</a>
+                            href="#">&lt;&lt;</a>
                         </li>
-                        <li class="page-item"><a class="page-link"
-                                                 href="#">prev</a>
-                        </li>
-                        <li data-page-num="" class="page-item">
-                            <a class="page-link"
-                               href="#">${i}</a>
-                        </li>
-                        <li class="page-item"><a class="page-link"
-                                                 href="#">next</a>
-                        </li>
-                        <li class="page-item"><a class="page-link"
-                                                 href="#">&gt;&gt;</a>
-                        </li>
-                </ul>
-            </nav>
+                    </c:if>
+                    <!-- step은 기본값이 1이다.-->    
+                    <c:forEach var ="1" begin="${maker.begin}" end="${maker.end}" step="1">
+                        
+                    <li class="page-item"><a class="page-link"
+                        href="#">prev</a>
+</li>
+
+<li data-page-num="" class="page-item">
+   <a class="page-link"
+      href="#">${i}</a>
+</li>
+
+<li class="page-item"><a class="page-link"
+                        href="#">next</a>
+</li>
+                    </c:forEach>
+
+                    <c:if test="${maker.next}">
+                            <li class="page-item"><a class="page-link"
+                                href="#">&gt;&gt;</a>
+                            </li>
+                    </c:if>
         </div>
     </div>
     </div>
-<!-- 게시글 삭제용 form -->
+
+    <!-- 게시글 삭제용 form -->
     <form action="/board/delete" method="post" name="removeForm">
         <input type="hidden" id="remove-bno" name="boardNo">
     </form>
@@ -132,7 +142,7 @@
         $cardContainer.addEventListener('click', e => {
             if (e.target.matches('.card-container')) return;
 
-            // 삭제 버튼을 눌렀다면~    
+            // 삭제 버튼을 눌렀다면~
             if (e.target.matches('.card-btn-group *')) {
                 $modal.style.display = 'flex'; // 숨겨진 모달창 드러내기.
 
@@ -142,12 +152,11 @@
                 // 삭제 확인 버튼 클릭 이벤트
                 $confirmDelete.onclick = () => {
                     // js로 form을 생성할 수 있음. -> post로 요청 보낼 것.
-                    // 비동기 전용 요청..
+                    // 비동기 전용 요청...
                     // 1. form 객체를 js로 생성해서 submit
-                    // 2. html form 태그를 작성해서 submit -> 요걸선택
+                    // 2. html form 태그를 작성해서 submit -> 요걸 선택
                     document.getElementById('remove-bno').value = delTargetBno;
                     document.removeForm.submit();
-                    
                 }
 
 

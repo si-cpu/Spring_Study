@@ -13,6 +13,7 @@ package com.study.springstudy.springmvc.chap03.service;
 import com.study.springstudy.springmvc.chap03.dto.ScorePostDTO;
 import com.study.springstudy.springmvc.chap03.dto.ScoreResponseDTO;
 import com.study.springstudy.springmvc.chap03.entity.Score;
+import com.study.springstudy.springmvc.chap03.mapper.ScoreMapper;
 import com.study.springstudy.springmvc.chap03.repository.ScoreJdbcRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ScoreService {
 
-    private final ScoreJdbcRepository repository;
+    private final ScoreMapper repository;
 
     public List<ScoreResponseDTO> findAll(String sort) {
          /*
@@ -55,4 +56,23 @@ public class ScoreService {
     public void remove(int stuNum) {
         repository.delete(stuNum);
     }
+
+    public void update(ScorePostDTO dto, int stuNum) {
+        Score changeScore = new Score(dto);
+        changeScore.setStuNum(stuNum); // 학번 넣어야 합니다!!!!
+        repository.update(changeScore);
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
