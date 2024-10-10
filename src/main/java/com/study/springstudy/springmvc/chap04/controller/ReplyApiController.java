@@ -1,8 +1,8 @@
 package com.study.springstudy.springmvc.chap04.controller;
 
-import com.study.springstudy.springmvc.chap04.dto.request.ReplyPostRequestDto;
-import com.study.springstudy.springmvc.chap04.dto.response.ReplyDetailResponseDto;
-import com.study.springstudy.springmvc.chap04.dto.response.ReplyListResponseDto;
+import com.study.springstudy.springmvc.chap04.dto.request.ReplyModifyRequestDTO;
+import com.study.springstudy.springmvc.chap04.dto.request.ReplyPostRequestDTO;
+import com.study.springstudy.springmvc.chap04.dto.response.ReplyListResponseDTO;
 import com.study.springstudy.springmvc.chap04.service.ReplyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +20,7 @@ public class ReplyApiController {
     private final ReplyService replyService;
 
     @PostMapping
-    public ResponseEntity<?> create(@Validated @RequestBody ReplyPostRequestDto dto,
+    public ResponseEntity<?> create(@Validated @RequestBody ReplyPostRequestDTO dto,
                                     BindingResult result) { // 검증 결과 메세지를 가진 객체.
 
         if (result.hasErrors()) {
@@ -43,10 +43,37 @@ public class ReplyApiController {
     public ResponseEntity<?> list(@PathVariable int boardNo,
                                   @PathVariable int pageNo) {
         System.out.println("boardNo: " + boardNo + ", pageNo: " + pageNo);
-        ReplyListResponseDto replies
+        ReplyListResponseDTO replies
                 = replyService.getList(boardNo, pageNo);
 
         return ResponseEntity.ok().body(replies);
+    }
+
+    @PatchMapping
+    public ResponseEntity<?> update(@Validated @RequestBody ReplyModifyRequestDTO dto,
+                                    BindingResult result) {
+        if (result.hasErrors()) {
+            return ResponseEntity.badRequest()
+                    .body(result.toString());
+        }
+
+        replyService.modify(dto);
+        return ResponseEntity.ok().body("modSuccess");
+    }
+
+    @DeleteMapping("/{replyNo}")
+    public ResponseEntity<?> remove(@PathVariable int replyNo) {
+        try {
+            replyService.delete(replyNo);
+            return ResponseEntity.ok()
+                    .body("delSuccess");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity
+                    .internalServerError()
+                    .body(e.getMessage());
+        }
+
     }
 
 

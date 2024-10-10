@@ -1,11 +1,10 @@
 package com.study.springstudy.springmvc.chap04.dto.response;
 
 import com.study.springstudy.springmvc.chap04.entity.Board;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 
 @Getter @ToString @EqualsAndHashCode
+@AllArgsConstructor
 public class BoardDetailResponseDTO {
 
     private final int boardNo;
@@ -13,8 +12,9 @@ public class BoardDetailResponseDTO {
     private final String content;
     private final String regDate;
     private final String writer;
+    private final int viewCount;
 
-    private int replyCount;// 목록용 각 게시물당 댓글 수 보여주는 전용 필드.
+    private int replyCount; // 목록에서 각 게시물 당 댓글 수 보여주는 전용 필드.
 
     public BoardDetailResponseDTO(Board board) {
         this.boardNo = board.getBoardNo();
@@ -22,9 +22,7 @@ public class BoardDetailResponseDTO {
         this.content = board.getContent();
         this.regDate = BoardListResponseDTO.makePrettierDateString(board.getRegDate());
         this.writer = board.getWriter();
-
-
-
+        this.viewCount = board.getViewCount();
     }
 }
 

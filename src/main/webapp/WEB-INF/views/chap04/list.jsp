@@ -33,16 +33,16 @@
                         <option value="writer">작성자</option>
                         <option value="tc">제목+내용</option>
                     </select>
-                    <input type="text" class="form-control" name="keyword">
+                    <input type="text" class="form-control" name="keyword" value="${s.keyword}">
                     <button class="btn btn-primary" type="submit">
                         <i class="fas fa-search"></i>
                     </button>
                 </form>
             </div>
             <div class="amount">
-                <div><a href="#">6</a></div>
-                <div><a href="#">18</a></div>
-                <div><a href="#">30</a></div>
+                <div><a href="/board/list?pageNo=1&amount=6&type=${s.type}&keyword=${s.keyword}">6</a></div>
+                <div><a href="/board/list?pageNo=1&amount=18&type=${s.type}&keyword=${s.keyword}">18</a></div>
+                <div><a href="/board/list?pageNo=1&amount=30&type=${s.type}&keyword=${s.keyword}">30</a></div>
             </div>
         </div>
         <!-- 메인 게시판 영역 -->
@@ -51,7 +51,10 @@
                 <div class="card-wrapper">
                     <section class="card" data-bno="${b.boardNo}">
                         <div class="card-title-wrapper">
-                            <h2 class="card-title">${b.shortTitle}</h2>
+                            <h2 class="card-title">
+                                ${b.shortTitle}
+                                <span>[${b.replyCount}]</span>
+                            </h2>
                             <div class="time-view-wrapper">
                                 <div class="time">
                                     <i class="far fa-clock"></i>
@@ -80,33 +83,27 @@
             <!-- 페이지 버튼 영역 -->
             <nav aria-label="Page navigation example">
                 <ul class="pagination pagination-lg pagination-custom">
-                    <c:if test="${maker.prev}">
-                        <li class="page-item"><a class="page-link"
-                            href="#">&lt;&lt;</a>
-                        </li>
-                    </c:if>
-                    <!-- step은 기본값이 1이다.-->    
-                    <c:forEach var ="1" begin="${maker.begin}" end="${maker.end}" step="1">
-                        
-                    <li class="page-item"><a class="page-link"
-                        href="#">prev</a>
-</li>
-
-<li data-page-num="" class="page-item">
-   <a class="page-link"
-      href="#">${i}</a>
-</li>
-
-<li class="page-item"><a class="page-link"
-                        href="#">next</a>
-</li>
-                    </c:forEach>
-
-                    <c:if test="${maker.next}">
-                            <li class="page-item"><a class="page-link"
-                                href="#">&gt;&gt;</a>
+                        <c:if test="${maker.prev}">
+                            <li class="page-item">
+                                <a class="page-link" href="/board/list?pageNo=${maker.begin-1}&amount=${s.amount}&type=${s.type}&keyword=${s.keyword}">&lt;&lt;</a>
                             </li>
-                    </c:if>
+                        </c:if>
+
+                        <!-- step은 기본값이 1, 생략 가능 -->
+                        <c:forEach var="i" begin="${maker.begin}" end="${maker.end}">
+                            <li data-page-num="${i}" class="page-item">
+                                <a class="page-link" href="/board/list?pageNo=${i}&amount=${s.amount}&type=${s.type}&keyword=${s.keyword}">${i}</a>
+                            </li>
+                        </c:forEach>
+
+
+                        <c:if test="${maker.next}">
+                            <li class="page-item">
+                                <a class="page-link" href="/board/list?pageNo=${maker.end + 1}&amount=${s.amount}&type=${s.type}&keyword=${s.keyword}">&gt;&gt;</a>
+                            </li>
+                        </c:if>
+                </ul>
+            </nav>
         </div>
     </div>
     </div>
@@ -175,7 +172,7 @@
             console.log('글 번호: ', bno);            
 
             // 서버에 요청 보내기
-            location.href='/board/detail/' + bno;
+            location.href='/board/detail/' + bno + '?pageNo=${s.pageNo}&amount=${s.amount}&type=${s.type}&keyword=${s.keyword}';
             
         })
 
@@ -213,6 +210,41 @@
       document.querySelector('.add-btn').onclick = e => {
         window.location.href = '/board/write';
       };
+
+
+      // 사용자가 현재 머물고 있는 페이지 버튼에 active 스타일 부여
+      function appendPageActive() {
+
+        // 현재 서버에서 넘겨준 페이지 번호
+        const currPage = '${maker.page.pageNo}';
+
+        // ul을 지목하고, ul의 자식 li들을 배열로 받기.
+        const $ul = document.querySelector('.pagination');
+        const $liList = [...$ul.children];
+
+        $liList.forEach($li => {
+            if (currPage === $li.dataset.pageNum) {
+                $li.classList.add('active');
+            }
+        });
+      }
+
+      // 검색조건 셀렉트 박스 옵션 타입 고정하기
+      function fixSearchOption() {
+        const $select = document.getElementById('search-type');
+
+        const $options = [...$select.children];
+        $options.forEach($opt => {
+            if ($opt.value === '${s.type}') {
+                // option 태그에 selected를 주면 그 option으로 고정됨.
+                $opt.setAttribute('selected', 'selected');
+            }
+        });
+      }
+
+      appendPageActive();
+      fixSearchOption();
+
     </script>
 
 
