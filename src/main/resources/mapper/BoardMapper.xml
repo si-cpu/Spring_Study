@@ -45,8 +45,18 @@
     ex) board_no : boardNo (o)  board_num : bnum (x)
     -->
 
-    <select id="findAll" resultType="board">
-        SELECT * FROM tbl_board
+    <select id="findAll" resultType="com.study.springstudy.springmvc.chap04.dto.response.ReplyDetailResponseDTO">
+        SELECT
+            b.board_no,
+            b.title,
+            b.content,
+            b.writer,
+            b.reg_date,
+            b.view_count,
+            COUNT(R.reply_no) AS reply_count
+        FROM tbl_board B
+        LEFT JOIN tbl_reply R
+        ON B.board_no= R.board_no
         <include refid="search" />
         ORDER BY board_no DESC
         LIMIT #{pageStart}, #{amount}
